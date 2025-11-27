@@ -2,7 +2,7 @@
     This is a single, self-contained HTML file.
     All CSS (custom styles) and JavaScript (calculator logic and Tailwind config) 
     are included directly in <style> and <script> tags to ensure it runs immediately 
-    and reliably in embedding tools like Canva's HTML Embed.
+    and reliably in embedding tools.
 -->
 
 <!-- 1. Load Custom Fonts -->
@@ -13,7 +13,7 @@
 <!-- 3. CSS Section: Custom Styles (from style.css) -->
 <style>
   /* ----------------------------------------------------------------------- */
-  /* GLOBAL STYLES & TAILWIND CUSTOM RADIO BUTTONS                           */
+  /* GLOBAL STYLES & TAILWIND CUSTOM RADIO BUTTONS                          */
   /* ----------------------------------------------------------------------- */
   /* Use the new font family for the entire app */
   .embed-container {
@@ -93,53 +93,67 @@
       </label>
 
       <!-- Track III Option: Focused Sessions -->
+      <!-- Updated Rate/Min for Track III -->
       <input type="radio" id="track3" name="service" value="track3" class="custom-radio">
       <label for="track3" class="p-4 rounded-lg border-2 border-gray-300 text-center cursor-pointer transition duration-200 hover:border-highlight text-primary-dark font-medium track-label">
         <span class="block text-lg font-impact tracking-wider">TRACK III</span>
-        <span class="block text-xs text-gray-500 mt-1">Focused Sessions & Strategy</span>
-        <span class="block text-xs font-semibold mt-1 text-action-secondary">Rate: $120/hr | Min: $500</span>
+        <span class="block text-xs text-gray-500 mt-1">Focused Sessions & De-influencing</span>
+        <span class="block text-xs font-semibold mt-1 text-action-secondary">Rate: $200/hr | Min: 2 hrs</span>
       </label>
     </div>
   </section>
 
   <!-- Service Descriptions -->
+  <!-- Updated to dynamically switch between track details -->
   <section id="service-details" class="mb-8 p-4 bg-card-bg rounded-lg border border-gray-200">
-    <h3 class="text-base font-bold text-primary-dark mb-2">Track I Details:</h3>
+    <h3 id="track-title" class="text-base font-bold text-primary-dark mb-2">Track I Details:</h3>
     <p id="track-description" class="text-sm text-gray-700 transition duration-300 ease-in-out">
-      The $200/hr Hourly Rate covers all on-site work, travel, vendor coordination, donation drop-offs, and administrative time. I commit to decumulating items with minimal environmental damage.
+      <!-- Description injected here by JS -->
     </p>
     <ul id="track-bullets" class="text-sm text-gray-700 mt-2 list-disc list-inside space-y-1">
-      <li>Full-service estate management</li>
-      <li>Downsizing and decluttering support</li>
-      <li>Donation coordination and placement</li>
+      <!-- Bullets injected here by JS -->
     </ul>
   </section>
 
-  <!-- Scope Selection -->
+  <!-- Scope Selection: Tiers (for Track I & II) OR Custom Input (for Track III) -->
   <section class="mb-8">
     <h2 class="text-xl font-impact tracking-wide text-primary-dark mb-4 border-b pb-2">2. Estimate Project Scope (Tier)</h2>
-    <div id="scope-options" class="grid grid-cols-3 gap-4">
-
-      <!-- Tier 1 Scope Option -->
+    
+    <!-- Tiers (Visible for Track I & II) -->
+    <div id="scope-tiers" class="grid grid-cols-3 gap-4 transition-opacity duration-300">
+      
+      <!-- Tier 1 Scope Option - $3,000 (15 hours) -->
       <input type="radio" id="scope-small" name="scope" value="small" class="custom-radio" checked>
       <label for="scope-small" class="p-4 rounded-lg border-2 border-gray-300 text-center cursor-pointer transition duration-200 hover:border-highlight text-primary-dark font-medium track-label">
         <span class="font-impact tracking-wider">TIER 1 (ENTRY)</span>
-        <span class="block text-xs text-gray-500 mt-1">(Min 15 Hours, Focused Area)</span>
+        <span class="block text-xs text-gray-500 mt-1">Min 15 Hours, Focused Area</span>
+        <span class="block text-base font-semibold text-action-primary mt-1">Starting at $3,000</span>
       </label>
 
-      <!-- Tier 2 Scope Option -->
+      <!-- Tier 2 Scope Option - $6,000 (30 hours) -->
       <input type="radio" id="scope-medium" name="scope" value="medium" class="custom-radio">
       <label for="scope-medium" class="p-4 rounded-lg border-2 border-gray-300 text-center cursor-pointer transition duration-200 hover:border-highlight text-primary-dark font-medium track-label">
         <span class="font-impact tracking-wider">TIER 2 (STANDARD)</span>
-        <span class="block text-xs text-gray-500 mt-1">(30 Estimated Hours, Multiple Areas)</span>
+        <span class="block text-xs text-gray-500 mt-1">30 Estimated Hours, Multiple Areas</span>
+        <span class="block text-base font-semibold text-action-primary mt-1">Starting at $6,000</span>
       </label>
 
-      <!-- Tier 3 Scope Option -->
+      <!-- Tier 3 Scope Option - $11,000 (55 hours) -->
       <input type="radio" id="scope-large" name="scope" value="large" class="custom-radio">
       <label for="scope-large" class="p-4 rounded-lg border-2 border-gray-300 text-center cursor-pointer transition duration-200 hover:border-highlight text-primary-dark font-medium track-label">
         <span class="font-impact tracking-wider">TIER 3 (COMPREHENSIVE)</span>
-        <span class="block text-xs text-gray-500 mt-1">(55 Estimated Hours, Full Scale)</span>
+        <span class="block text-xs text-gray-500 mt-1">55 Estimated Hours, Full Scale</span>
+        <span class="block text-base font-semibold text-action-primary mt-1">Starting at $11,000</span>
       </label>
+    </div>
+
+    <!-- Custom Hours Input (Hidden by default, shown for Track III) -->
+    <div id="custom-hours-input" class="hidden p-4 rounded-lg bg-gray-100 border border-gray-300 transition-opacity duration-300">
+        <label for="custom-hours" class="block mb-2 text-sm font-medium text-gray-700">Enter Estimated Hours (Track III Minimum: 2 Hours)</label>
+        <input type="number" id="custom-hours" min="2" value="2" step="1"
+               class="w-full px-4 py-2 border border-gray-300 rounded-lg text-lg font-impact tracking-wide text-primary-dark focus:ring-highlight focus:border-highlight transition"
+               placeholder="Minimum 2 Hours">
+        <p class="text-xs text-gray-500 mt-2">Track III uses custom hour estimates, priced at $200/hr. The calculation will enforce a minimum of 2 hours ($400).</p>
     </div>
   </section>
 
@@ -184,7 +198,7 @@
   <div class="bg-card-bg p-6 rounded-xl shadow-inner border border-highlight/30 text-center">
     <p class="text-lg text-primary-dark font-impact tracking-wider">ESTIMATED PROJECT COST:</p>
     <p id="estimated-cost" class="text-5xl font-impact tracking-wider text-action-primary mt-2 transition duration-500 transform scale-105">
-      $5,250
+      $400
     </p>
     <p id="cost-breakdown" class="text-sm text-gray-700 mt-3 font-medium"></p>
     <p class="text-xs text-gray-500 mt-1">
@@ -231,72 +245,72 @@
       },
     },
   };
+
   // Application logic (Calculation script)
   document.addEventListener('DOMContentLoaded', () => {
     // Helper function for safe ID lookup
     const getEl = (id) => document.getElementById(id);
+
     // Elements
     const serviceOptions = getEl('service-options');
-    const scopeOptions = getEl('scope-options');
+    const scopeTiers = getEl('scope-tiers'); // HTML element (ID: scope-tiers)
+    const customHoursInputDiv = getEl('custom-hours-input');
+    const customHoursInput = getEl('custom-hours');
     const ecoRecyclingToggle = getEl('eco-recycling-toggle');
     const complexitySlider = getEl('complexity-slider');
+    const trackTitle = getEl('track-title');
     const trackDescription = getEl('track-description');
     const trackBullets = getEl('track-bullets');
     const estimatedCostDisplay = getEl('estimated-cost');
     const costBreakdownDisplay = getEl('cost-breakdown');
-    // Configuration Data
+
+    // Configuration Data (Updated with new rates and descriptions)
+    const HOURLY_RATE = 200;
     const serviceTracks = {
       track1: {
-        rate: 200,
-        min: 15,
-        title: 'Track I Details:',
-        description: "The $200/hr Hourly Rate covers all on-site work, travel, vendor coordination, donation drop-offs, and administrative time. I commit to decumulating items with minimal environmental damage.",
+        rate: HOURLY_RATE,
+        minHours: 15,
+        title: 'Track I Details: Estate & Physical Transitions',
+        description: "The $200/hr rate covers all on-site work, travel, vendor coordination, donation drop-offs, and administrative time. I'm committed to finding true second lives for items and minimizing environmental impact.",
         bullets: [
           'Full-service estate management',
           'Downsizing and decluttering support',
-          'Donation coordination and placement'
+          'Donation coordination and strategic placement'
         ]
       },
       track2: {
-        rate: 200,
-        min: 15,
-        title: 'Track II Details:',
-        description: "The $200/hr Hourly Rate applies to business and organizational consulting, including system implementation, process documentation, and inventory management.",
+        rate: HOURLY_RATE,
+        minHours: 15,
+        title: 'Track II Details: Business & Organizational Systems',
+        description: "The $200/hr rate covers systems assessment, implementation, vendor coordination, staff training, and administrative setup.",
         bullets: [
-          'Organizational system audits and redesign',
-          'Process flow documentation (SOPs)',
-          'Digital asset and data organization'
+          'Database migration and consolidation',
+          'Project management system deployment',
+          'Administrative efficiency and workflow documentation'
         ]
       },
       track3: {
-        rate: 120,
-        min: 500, // Minimum project value for Track III
-        title: 'Track III Details:',
-        description: "The $120/hr rate is reserved for focused sessions like strategy consulting, one-time decluttering sessions, and project-based assignments, with a minimum project investment of $500.",
+        rate: HOURLY_RATE,
+        minHours: 2, // New min hours for custom entry
+        title: 'Track III Details: Focused Sessions & De-influencing',
+        description: "The $200/hr rate covers on-site work, assessment, coordination, travel, and follow-up. Perfect for focused support without a full project commitment.",
         bullets: [
-          'Single-session consulting and strategy',
-          'Virtual organizing support',
-          'Project-based organizing (fixed scope)'
+          'Single-room or focused area organizing',
+          'Holiday decluttering (e.g., "Santa Needs Space")',
+          'Side-by-side decluttering sessions',
+          'Donation coordination'
         ]
       }
     };
-    const scopeTiers = {
-      small: {
-        hours: 15,
-        baseCost: 500,
-        label: 'Entry (15 Estimated Hours)'
-      }, // Base cost for Track III, hours for Track I/II
-      medium: {
-        hours: 30,
-        baseCost: 1500,
-        label: 'Standard (30 Estimated Hours)'
-      },
-      large: {
-        hours: 55,
-        baseCost: 3500,
-        label: 'Comprehensive (55 Estimated Hours)'
-      }
+
+    // Hours for Tracks I & II
+    // RENAMED scopeTiers to scopeTiersData to resolve the SyntaxError
+    const scopeTiersData = { 
+      small: { hours: 15, label: 'TIER 1 (ENTRY)' },
+      medium: { hours: 30, label: 'TIER 2 (STANDARD)' },
+      large: { hours: 55, label: 'TIER 3 (COMPREHENSIVE)' }
     };
+
     const ecoRecyclingFee = 350;
     const complexityModifier = {
       1: 0.9, // -10% discount for very straightforward
@@ -305,81 +319,125 @@
       4: 1.05,
       5: 1.15 // +15% surcharge for highly complex
     };
+
     // State
     let currentTrack = 'track1';
-    let currentScope = 'small';
+    let currentScope = 'small'; // Default scope for Tracks I/II
     let isEcoRecycling = false;
     let currentComplexity = 3;
+
+    // Get the currently selected scope hours (or custom hours for track 3)
+    const getProjectHours = () => {
+      if (currentTrack === 'track3') {
+        // Track III uses custom hours, minimum 2
+        let hours = parseInt(customHoursInput.value, 10) || serviceTracks.track3.minHours;
+        return Math.max(hours, serviceTracks.track3.minHours);
+      } else {
+        // Tracks I & II use tiers
+        // Using scopeTiersData here
+        return scopeTiersData[currentScope]?.hours || serviceTracks[currentTrack].minHours; 
+      }
+    };
+
     // Core Calculation Logic
     const calculateCost = () => {
       const track = serviceTracks[currentTrack];
-      const scope = scopeTiers[currentScope];
+      const hours = getProjectHours();
       const modifier = complexityModifier[currentComplexity];
-      let baseCost = 0;
-      let hours = 0;
-      let rate = track.rate;
+      
+      let baseCost = hours * track.rate;
       let breakdownText = '';
+
+      // Set base breakdown text
       if (currentTrack === 'track3') {
-        // Track III uses fixed costs for scope tiers (or minimum, if scope tier is too low)
-        baseCost = Math.max(scope.baseCost, track.min);
-        breakdownText = `(Base Fee: $${baseCost.toLocaleString()})`;
+        breakdownText = `(Hourly Rate: $${track.rate}/hr x ${hours} hrs | Min 2 hrs)`;
       } else {
-        // Tracks I & II use hourly rates
-        hours = scope.hours;
-        baseCost = hours * rate;
-        breakdownText = `(Hourly Rate: $${rate}/hr x ${hours} hrs)`;
-        // Ensure minimum hours are met
-        if (hours < track.min) {
-          hours = track.min;
-          baseCost = hours * rate;
-          breakdownText = `(Hourly Rate: $${rate}/hr x Min ${hours} hrs)`;
-        }
+        // Tracks I & II
+        // Using scopeTiersData here
+        const tier = scopeTiersData[currentScope]?.label || 'Tier 1';
+        breakdownText = `(${tier} | $${track.rate}/hr x ${hours} hrs)`;
       }
+
       let totalCost = baseCost;
+
       // Apply complexity modifier
       if (modifier !== 1.0) {
         const modifierAmount = totalCost * (modifier - 1);
         totalCost += modifierAmount;
         breakdownText += ` | Modifier: ${Math.round(modifier * 100)}%`;
       }
+
       // Add eco-recycling fee if checked
       if (isEcoRecycling) {
         totalCost += ecoRecyclingFee;
         breakdownText += ` | Eco Fee: $${ecoRecyclingFee}`;
       }
+
       // Update UI
       estimatedCostDisplay.textContent = `$${Math.round(totalCost).toLocaleString()}`;
       costBreakdownDisplay.textContent = breakdownText;
     };
-    // Update Service Description when track changes
+
+    // Update Service Description and manage visibility of scope selection
     const updateDescription = () => {
       const track = serviceTracks[currentTrack];
+      
+      trackTitle.textContent = track.title;
       trackDescription.textContent = track.description;
+      
       // Update bullets
       trackBullets.innerHTML = track.bullets.map(b => `<li>${b}</li>`).join('');
-      // Update breakdown based on track change
+
+      // Manage visibility of Tiers vs. Custom Hours Input
+      if (currentTrack === 'track3') {
+        scopeTiers.classList.add('hidden');
+        customHoursInputDiv.classList.remove('hidden');
+        // Ensure custom hours starts at minimum 2 when switching to Track III
+        customHoursInput.value = serviceTracks.track3.minHours;
+      } else {
+        customHoursInputDiv.classList.add('hidden');
+        scopeTiers.classList.remove('hidden');
+      }
+
       calculateCost();
     };
+
     // Event Listeners
     serviceOptions.addEventListener('change', (e) => {
       currentTrack = e.target.value;
       updateDescription();
-      calculateCost();
     });
-    scopeOptions.addEventListener('change', (e) => {
-      currentScope = e.target.value.toLowerCase();
-      calculateCost();
+
+    // Tier selection is only relevant for Tracks I/II
+    scopeTiers.addEventListener('change', (e) => {
+      // Added check to ensure it's a radio button change within the tiers container
+      if (e.target.name === 'scope') {
+        currentScope = e.target.value.toLowerCase();
+        calculateCost();
+      }
     });
+
+    // Custom Hours input (Track III)
+    customHoursInput.addEventListener('input', calculateCost);
+
     ecoRecyclingToggle.addEventListener('change', (e) => {
       isEcoRecycling = e.target.checked;
       calculateCost();
     });
+
     complexitySlider.addEventListener('input', (e) => {
       currentComplexity = parseInt(e.target.value, 10);
       calculateCost();
     });
+
     // Initial setup
-    updateDescription(); // Set initial Track I description
+    // Find the initially checked radio button to set initial state
+    const initialTrackEl = document.querySelector('input[name="service"]:checked');
+    if (initialTrackEl) {
+      currentTrack = initialTrackEl.value;
+    }
+    
+    updateDescription(); // Set initial Track I description and logic visibility
     calculateCost(); // Calculate initial cost
   });
 </script>
