@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Responsive Calculator</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for mobile-first design and modern look */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        #calculator {
+            background-color: #ffffff;
+            border-radius: 1.5rem; /* Large rounded corners */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
+            max-width: 400px;
+            width: 100%;
+            padding: 1.5rem;
+        }
+        .display {
+            background-color: #1f2937; /* Dark display background */
+            color: #ffffff;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            text-align: right;
+            font-size: 2.5rem;
+            height: 4rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            overflow-x: auto;
+        }
+        .calc-button {
+            /* Common button styles */
+            padding: 1rem 0;
+            border-radius: 9999px; /* Fully rounded/pill shape */
+            font-size: 1.25rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+            user-select: none; /* Prevent selection on mobile tap */
+            outline: none;
+            border: none;
+        }
+        /* Style for Action/Operator buttons (Grey/Blue) */
+        .action-button {
+            background-color: #e5e7eb; /* Light gray */
+            color: #4b5563; /* Dark gray text */
+        }
+        .action-button:hover {
+            background-color: #d1d5db;
+        }
+        /* Style for Number buttons (Darker Gray) */
+        .number-button {
+            background-color: #f3f4f6; /* Very light gray */
+            color: #1f2937; /* Very dark text */
+        }
+        .number-button:hover {
+            background-color: #e5e7eb;
+        }
+        /* Style for Equals button (Primary Color) */
+        .equals-button {
+            background-color: #3b82f6; /* Blue */
+            color: #ffffff;
+            grid-column: span 2; /* Span two columns */
+        }
+        .equals-button:hover {
+            background-color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="calculator">
+        <!-- Display Screen -->
+        <div id="display" class="display">0</div>
+
+        <!-- Button Grid -->
+        <div class="grid grid-cols-4 gap-3">
+            <!-- First Row -->
+            <button class="calc-button action-button" onclick="clearDisplay()">AC</button>
+            <button class="calc-button action-button" onclick="deleteLast()">DEL</button>
+            <button class="calc-button action-button" onclick="appendOperator('%')">%</button>
+            <button class="calc-button action-button" onclick="appendOperator('/')">/</button>
+
+            <!-- Second Row -->
+            <button class="calc-button number-button" onclick="appendNumber('7')">7</button>
+            <button class="calc-button number-button" onclick="appendNumber('8')">8</button>
+            <button class="calc-button number-button" onclick="appendNumber('9')">9</button>
+            <button class="calc-button action-button" onclick="appendOperator('*')">*</button>
+
+            <!-- Third Row -->
+            <button class="calc-button number-button" onclick="appendNumber('4')">4</button>
+            <button class="calc-button number-button" onclick="appendNumber('5')">5</button>
+            <button class="calc-button number-button" onclick="appendNumber('6')">6</button>
+            <button class="calc-button action-button" onclick="appendOperator('-')">-</button>
+
+            <!-- Fourth Row -->
+            <button class="calc-button number-button" onclick="appendNumber('1')">1</button>
+            <button class="calc-button number-button" onclick="appendNumber('2')">2</button>
+            <button class="calc-button number-button" onclick="appendNumber('3')">3</button>
+            <button class="calc-button action-button" onclick="appendOperator('+')">+</button>
+
+            <!-- Fifth Row -->
+            <button class="calc-button number-button" onclick="appendNumber('0')">0</button>
+            <button class="calc-button number-button" onclick="appendNumber('.')">.</button>
+            <button class="calc-button equals-button" onclick="calculateResult()">=</button>
+        </div>
+    </div>
+
+    <script>
+        let currentInput = '0';
+        let previousInput = '';
+        let operator = null;
+        const display = document.getElementById('display');
+
+        function updateDisplay() {
+            // Limits the display length to keep it readable
+            display.textContent = currentInput.length > 15 ? currentInput.substring(0, 15) + '...' : currentInput;
+        }
+
+        function clearDisplay() {
+            currentInput = '0';
+            previousInput = '';
+            operator = null;
+            updateDisplay();
+        }
+
+        function deleteLast() {
+            if (currentInput === 'Error') {
+                clearDisplay();
+                return;
+            }
+            if (currentInput.length > 1) {
+                currentInput = currentInput.slice(0, -1);
+            } else {
+                currentInput = '0';
+            }
+            updateDisplay();
+        }
+
+        function appendNumber(number) {
+            if (currentInput === 'Error') clearDisplay();
+
+            if (number === '.' && currentInput.includes('.')) return;
+            if (currentInput === '0' && number !== '.') {
+                currentInput = number;
+            } else {
+                currentInput += number;
+            }
+            updateDisplay();
+        }
+
+        function appendOperator(nextOperator) {
+            if (currentInput === 'Error') return;
+
+            if (operator && previousInput) {
+                calculateResult();
+            }
+
+            operator = nextOperator;
+            previousInput = currentInput;
+            currentInput = '0';
+            updateDisplay();
+        }
+
+        function calculateResult() {
+            if (!operator || !previousInput) return;
+
+            const prev = parseFloat(previousInput);
+            const current = parseFloat(currentInput);
+            let result;
+
+            if (isNaN(prev) || isNaN(current)) {
+                currentInput = 'Error';
+                updateDisplay();
+                return;
+            }
+
+            switch (operator) {
+                case '+':
+                    result = prev + current;
+                    break;
+                case '-':
+                    result = prev - current;
+                    break;
+                case '*':
+                    result = prev * current;
+                    break;
+                case '/':
+                    if (current === 0) {
+                        currentInput = 'Error';
+                        updateDisplay();
+                        return;
+                    }
+                    result = prev / current;
+                    break;
+                case '%':
+                    result = prev * (current / 100);
+                    break;
+                default:
+                    return;
+            }
+
+            // Handle floating point precision issues
+            result = parseFloat(result.toFixed(10));
+            currentInput = result.toString();
+            operator = null;
+            previousInput = '';
+            updateDisplay();
+        }
+
+        // Initialize display
+        window.onload = updateDisplay;
+
+    </script>
+</body>
+</html>
+
