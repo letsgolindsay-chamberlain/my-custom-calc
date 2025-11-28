@@ -62,6 +62,18 @@
   .track-label:hover {
     border-color: #f9a828;
   }
+
+  /* Custom range slider thumb styling for better touch interaction */
+  input[type=range]::-webkit-slider-thumb {
+    width: 24px;
+    height: 24px;
+    background: #bf4146;
+    border: 3px solid #f9a828;
+    border-radius: 50%;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -10px;
+  }
 </style>
 
 <!-- 4. Main HTML Structure -->
@@ -69,6 +81,12 @@
   <header class="text-center mb-8">
     <h1 class="text-3xl font-impact tracking-widest font-normal text-primary-dark uppercase">Determine Your Project Investment</h1>
     <p class="mt-2 text-gray-700">Select the service track that matches your goal and estimate your scope.</p>
+    
+    <!-- Example Scenarios Link (Point 10) -->
+    <p class="mt-4 text-sm text-action-secondary font-medium">
+      Not sure which track or tier fits your needs? 
+      <a href="#examples" class="underline hover:text-highlight transition">View Example Project Scenarios →</a>
+    </p>
   </header>
 
   <!-- Service Selection -->
@@ -93,7 +111,6 @@
       </label>
 
       <!-- Track III Option: Focused Sessions -->
-      <!-- Updated Rate/Min for Track III -->
       <input type="radio" id="track3" name="service" value="track3" class="custom-radio">
       <label for="track3" class="p-4 rounded-lg border-2 border-gray-300 text-center cursor-pointer transition duration-200 hover:border-highlight text-primary-dark font-medium track-label">
         <span class="block text-lg font-impact tracking-wider">TRACK III</span>
@@ -104,7 +121,6 @@
   </section>
 
   <!-- Service Descriptions -->
-  <!-- Updated to dynamically switch between track details -->
   <section id="service-details" class="mb-8 p-4 bg-card-bg rounded-lg border border-gray-200">
     <h3 id="track-title" class="text-base font-bold text-primary-dark mb-2">Track I Details:</h3>
     <p id="track-description" class="text-sm text-gray-700 transition duration-300 ease-in-out">
@@ -147,41 +163,76 @@
       </label>
     </div>
 
-    <!-- Custom Hours Input (Hidden by default, shown for Track III) -->
+    <!-- Custom Hours Input (Hidden by default, shown for Track III) - Point 1, 6 -->
     <div id="custom-hours-input" class="hidden p-4 rounded-lg bg-gray-100 border border-gray-300 transition-opacity duration-300">
         <label for="custom-hours" class="block mb-2 text-sm font-medium text-gray-700">Enter Estimated Hours (Track III Minimum: 2 Hours)</label>
         <input type="number" id="custom-hours" min="2" value="2" step="1"
                class="w-full px-4 py-2 border border-gray-300 rounded-lg text-lg font-impact tracking-wide text-primary-dark focus:ring-highlight focus:border-highlight transition"
                placeholder="Minimum 2 Hours">
-        <p class="text-xs text-gray-500 mt-2">Track III uses custom hour estimates, priced at $200/hr. The calculation will enforce a minimum of 2 hours ($400).</p>
+        
+        <!-- Error/Helper Message for Track III Minimum -->
+        <p id="track3-error" class="text-sm text-action-primary font-semibold mt-2 hidden">
+          ⚠️ Track III minimum is 2 hours ($400).
+        </p>
+
+        <!-- Estimation Helper Text (Point 1) -->
+        <p class="text-xs text-gray-500 mt-2 border-t border-gray-200 pt-2">
+          <span class="font-bold">Need help estimating?</span>
+          <ul>
+            <li>Single room organizing: 2-3 hours</li>
+            <li>Holiday decluttering session: 2-4 hours</li>
+            <li>Side-by-side decluttering: 3-5 hours</li>
+            <li>Donation coordination: 2-3 hours</li>
+          </ul>
+        </p>
     </div>
   </section>
 
-  <!-- Premium Eco-Recycling Option -->
+  <!-- Premium Eco-Recycling Option - Point 5 -->
   <section class="mb-10 p-4 bg-highlight/10 rounded-lg border border-highlight/50">
     <h2 class="text-xl font-impact tracking-wide text-primary-dark mb-3 border-b border-highlight/50 pb-2 flex items-center">
-      <!-- Icon for Eco-Recycling - Using the Secondary Accent color -->
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-action-secondary" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-9a1 1 0 000 2h2a1 1 0 100-2h-2z" clip-rule="evenodd" />
         <path fill-rule="evenodd" d="M10 3a7 7 0 110 14 7 7 0 010-14zM4 10a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1z" clip-rule="evenodd" />
       </svg>
-      3. Premium Eco-Recycling Surcharge
+      3. PREMIUM ECO-RECYCLING SURCHARGE
     </h2>
 
-    <div class="flex items-center justify-between">
-      <p class="text-sm text-gray-700 md:w-3/4">
-        Opt-in for specialized, hard-to-recycle waste management (e.g., TerraCycle, specialty e-waste). This fee covers the transparent cost of proprietary collection and dedicated transport.
-      </p>
-      <label for="eco-recycling-toggle" class="relative inline-flex items-center cursor-pointer">
-        <input type="checkbox" id="eco-recycling-toggle" value="" class="sr-only peer">
-        <!-- Using a complementary color for the toggle switch -->
-        <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-highlight/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-action-secondary"></div>
-        <span class="ml-3 text-sm font-medium text-gray-900">Include Fee</span>
-      </label>
+    <div class="space-y-3">
+        <p class="text-sm text-gray-700">
+            Opt-in for specialized, hard-to-recycle waste management using TerraCycle Zero Waste Boxes.
+        </p>
+        <ul class="text-sm text-gray-700 list-none space-y-1 ml-0 pl-0">
+            <li class="flex items-start">
+                <span class="text-action-secondary mr-2 font-bold">✓</span> Textiles/clothing (fiber-to-fiber recycling, NOT Goodwill)
+            </li>
+            <li class="flex items-start">
+                <span class="text-action-secondary mr-2 font-bold">✓</span> E-waste (electronics, cords, batteries)
+            </li>
+            <li class="flex items-start">
+                <span class="text-action-secondary mr-2 font-bold">✓</span> Specialty items (beauty products, office supplies, plastics #3-7)
+            </li>
+            <li class="flex items-start">
+                <span class="text-action-secondary mr-2 font-bold">✓</span> Dedicated transport to collection sites
+            </li>
+        </ul>
+
+        <div class="flex items-center justify-between pt-2 border-t border-highlight/30">
+            <!-- Initial display set to the range for the default 15-hour project -->
+            <span id="eco-surcharge-estimate" class="text-sm font-semibold text-primary-dark">
+                Estimated surcharge for your project: $300–$600
+            </span>
+            <label for="eco-recycling-toggle" class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="eco-recycling-toggle" value="" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-highlight/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-action-secondary"></div>
+                <span class="ml-3 text-sm font-medium text-gray-900">Include Fee</span>
+            </label>
+        </div>
+        <p class="text-xs text-gray-500 italic mt-1">*Standard donation coordination (Goodwill, Salvation Army) is included in the base rate.</p>
     </div>
   </section>
 
-  <!-- Complexity/Modifier Slider -->
+  <!-- Complexity/Modifier Slider - Point 4 -->
   <section class="mb-10">
     <h2 class="text-xl font-impact tracking-wide text-primary-dark mb-4 border-b pb-2">4. Project Complexity Modifier</h2>
     <label for="complexity-slider" class="block mb-2 text-sm font-medium text-gray-700">How challenging is the current state of the space or systems?</label>
@@ -192,24 +243,49 @@
       <span class="font-semibold text-primary-dark">Average Challenge (3)</span>
       <span>Highly Complex (5)</span>
     </div>
+    
+    <!-- Dynamic Complexity Status (Point 4) -->
+    <div id="complexity-status" class="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+      <p class="text-sm font-medium text-primary-dark transition duration-300">
+        Currently selected: <span id="complexity-level-text" class="font-bold text-highlight">Average Challenge (3)</span>
+      </p>
+      <p id="complexity-impact" class="text-xs text-gray-600 mt-1">
+        Impact: +10% complexity adjustment (Typical clutter, some challenges)
+      </p>
+    </div>
   </section>
 
-  <!-- Result Display -->
+  <!-- Result Display - Point 3, 6, 8 -->
   <div class="bg-card-bg p-6 rounded-xl shadow-inner border border-highlight/30 text-center">
     <p class="text-lg text-primary-dark font-impact tracking-wider">ESTIMATED PROJECT COST:</p>
     <p id="estimated-cost" class="text-5xl font-impact tracking-wider text-action-primary mt-2 transition duration-500 transform scale-105">
-      $400
+      $0
     </p>
-    <p id="cost-breakdown" class="text-sm text-gray-700 mt-3 font-medium"></p>
-    <p class="text-xs text-gray-500 mt-1">
+
+    <!-- Detailed Breakdown Toggle (Point 7) -->
+    <button id="breakdown-toggle" class="mt-3 text-sm font-medium text-action-secondary hover:text-highlight transition">
+        Show Detailed Breakdown ▼
+    </button>
+    
+    <!-- Detailed Breakdown Content (Point 7) -->
+    <div id="detailed-breakdown" class="hidden text-left mt-4 border-t border-gray-300 pt-3 space-y-1">
+        <!-- Breakdown injected by JS -->
+    </div>
+    
+    <!-- Cost Disclaimer and CTA (Point 8) -->
+    <p class="text-xs text-gray-500 mt-5">
       * This is a dynamic estimate. A final quote requires a detailed consultation.
     </p>
 
     <!-- Action Button (Book Session) -->
-    <!-- UPDATED: Setting the href to the user-provided link for the connect page -->
     <a href="https://provenanceestatesolutions.com/#connect" target="_top" class="inline-block mt-4 w-full md:w-auto px-8 py-3 bg-action-primary text-white font-impact tracking-wider rounded-full shadow-lg hover:bg-highlight transition duration-300 uppercase no-underline">
       Book Your Complimentary Discovery Session
     </a>
+    
+    <!-- CTA Reassurance (Point 8) -->
+    <p class="text-xs text-gray-600 mt-1">
+      No obligation. We'll discuss your specific needs and refine this estimate together.
+    </p>
   </div>
 </div>
 
@@ -221,26 +297,17 @@
       extend: {
         // Custom font families for site consistency
         fontFamily: {
-          // Body font (Open Sauce -> Open Sans substitution)
           'body': ['"Open Sans"', 'sans-serif'],
-          // Impact/Bold font (Bebas Neue)
           'impact': ['"Bebas Neue"', 'sans-serif'],
-          // Cursive/Title font (Great Vibes)
           'cursive': ['"Great Vibes"', 'cursive'],
         },
         // Custom sunset-themed color palette
         colors: {
-          // Dark background/Primary text color (Dark Blue)
           'primary-dark': '#202d4f',
-          // Light background/Card background (Cream)
           'card-bg': '#f9f7f0',
-          // Highlight/Accent color (Gold/Orange)
           'highlight': '#f9a828',
-          // Action Button Primary (Deep Red/Maroon)
           'action-primary': '#bf4146',
-          // Secondary Accent/Link/Info color (Soft Blue/Lavender)
           'action-secondary': '#a0a8d9',
-          // Tertiary Accent/Complementary color (Soft Pink)
           'tertiary-accent': '#fdd2e8',
         },
       },
@@ -254,129 +321,185 @@
 
     // Elements
     const serviceOptions = getEl('service-options');
-    const scopeTiers = getEl('scope-tiers'); // HTML element (ID: scope-tiers)
+    const scopeTiers = getEl('scope-tiers'); 
     const customHoursInputDiv = getEl('custom-hours-input');
     const customHoursInput = getEl('custom-hours');
+    const track3Error = getEl('track3-error');
     const ecoRecyclingToggle = getEl('eco-recycling-toggle');
     const complexitySlider = getEl('complexity-slider');
     const trackTitle = getEl('track-title');
     const trackDescription = getEl('track-description');
     const trackBullets = getEl('track-bullets');
     const estimatedCostDisplay = getEl('estimated-cost');
-    const costBreakdownDisplay = getEl('cost-breakdown');
+    const ecoSurchargeEstimate = getEl('eco-surcharge-estimate');
+    const complexityStatus = getEl('complexity-status');
+    const complexityLevelText = getEl('complexity-level-text');
+    const complexityImpact = getEl('complexity-impact');
+    const breakdownToggle = getEl('breakdown-toggle');
+    const detailedBreakdown = getEl('detailed-breakdown');
 
-    // Configuration Data (Updated with new rates and descriptions)
+    // Configuration Data
     const HOURLY_RATE = 200;
-    const serviceTracks = {
-      track1: {
-        rate: HOURLY_RATE,
-        minHours: 15,
-        title: 'Track I Details: Estate & Physical Transitions',
-        description: "The $200/hr rate covers all on-site work, travel, vendor coordination, donation drop-offs, and administrative time. I'm committed to finding true second lives for items and minimizing environmental impact.",
-        bullets: [
-          'Full-service estate management',
-          'Downsizing and decluttering support',
-          'Donation coordination and strategic placement'
-        ]
-      },
-      track2: {
-        rate: HOURLY_RATE,
-        minHours: 15,
-        title: 'Track II Details: Business & Organizational Systems',
-        description: "The $200/hr rate covers systems assessment, implementation, vendor coordination, staff training, and administrative setup.",
-        bullets: [
-          'Database migration and consolidation',
-          'Project management system deployment',
-          'Administrative efficiency and workflow documentation'
-        ]
-      },
-      track3: {
-        rate: HOURLY_RATE,
-        minHours: 2, // New min hours for custom entry
-        title: 'Track III Details: Focused Sessions & De-influencing',
-        description: "The $200/hr rate covers on-site work, assessment, coordination, travel, and follow-up. Perfect for focused support without a full project commitment.",
-        bullets: [
-          'Single-room or focused area organizing',
-          'Holiday decluttering (e.g., "Santa Needs Space")',
-          'Side-by-side decluttering sessions',
-          'Donation coordination'
-        ]
-      }
+    const serviceTracks = { /* ... (Definitions remain the same) ... */
+      track1: { rate: HOURLY_RATE, minHours: 15, title: 'Track I Details: Estate & Physical Transitions', description: "The $200/hr rate covers all on-site work, travel, vendor coordination, donation drop-offs, and administrative time. I'm committed to finding true second lives for items and minimizing environmental impact.", bullets: ['Full-service estate management', 'Downsizing and decluttering support', 'Donation coordination and strategic placement'] },
+      track2: { rate: HOURLY_RATE, minHours: 15, title: 'Track II Details: Business & Organizational Systems', description: "The $200/hr rate covers systems assessment, implementation, vendor coordination, staff training, and administrative setup.", bullets: ['Database migration and consolidation', 'Project management system deployment', 'Administrative efficiency and workflow documentation'] },
+      track3: { rate: HOURLY_RATE, minHours: 2, title: 'Track III Details: Focused Sessions & De-influencing', description: "The $200/hr rate covers on-site work, assessment, coordination, travel, and follow-up. Perfect for focused support without a full project commitment.", bullets: ['Single-room or focused area organizing', 'Holiday decluttering (e.g., "Santa Needs Space")', 'Side-by-side decluttering sessions', 'Donation coordination'] }
     };
-
-    // Hours for Tracks I & II
-    // RENAMED scopeTiers to scopeTiersData to resolve the SyntaxError
     const scopeTiersData = { 
       small: { hours: 15, label: 'TIER 1 (ENTRY)' },
       medium: { hours: 30, label: 'TIER 2 (STANDARD)' },
       large: { hours: 55, label: 'TIER 3 (COMPREHENSIVE)' }
     };
 
-    const ecoRecyclingFee = 350;
+    // Point 3 & 4: Complexity Modifier Logic
     const complexityModifier = {
-      1: 0.9, // -10% discount for very straightforward
-      2: 0.95,
-      3: 1.0, // Base rate
-      4: 1.05,
-      5: 1.15 // +15% surcharge for highly complex
+      1: { text: 'Straightforward (1)', percent: -0.05, description: 'Simple, organized space' }, // -5%
+      2: { text: 'Low Challenge (2)', percent: -0.05, description: 'Slightly cluttered, minimal conflict' }, // -5%
+      3: { text: 'Average Challenge (3)', percent: 0.10, description: 'Typical clutter, some challenges' }, // +10%
+      4: { text: 'High Challenge (4)', percent: 0.20, description: 'High clutter, moderate conflict/hazards' }, // +20%
+      5: { text: 'Highly Complex (5)', percent: 0.30, description: 'Hoarding, biohazards, high conflict, tight deadline' } // +30%
+    };
+
+    // New TerraCycle Surcharge Logic
+    const getEcoRecyclingFee = (hours) => {
+        const BOX_COST_AVG = 150;
+        const TRANSPORT_MULTIPLIER = 1.20;
+        let numBoxes = 0;
+        let rangeLabel = '$0';
+        let minFee = 0;
+        let maxFee = 0;
+
+        if (hours >= 31) {
+            // TIER 3 (55 hours): 8-15+ boxes. Use 12 boxes for average.
+            numBoxes = 12; 
+            rangeLabel = '$1,200–$2,500';
+            minFee = 1200;
+            maxFee = 2500;
+        } else if (hours >= 16) { 
+            // TIER 2 (30 hours): 4-8 medium boxes. Use 6 boxes for average.
+            numBoxes = 6; 
+            rangeLabel = '$600–$1,200';
+            minFee = 600;
+            maxFee = 1200;
+        } else if (hours >= 11) { 
+            // TIER 1 (15 hours): 2-4 medium boxes. Use 3 boxes for average.
+            numBoxes = 3; 
+            rangeLabel = '$300–$600';
+            minFee = 300;
+            maxFee = 600;
+        } else if (hours >= 2) { 
+            // TRACK III (2-10 hours): 1-3 small boxes. Use 2 boxes for average.
+            numBoxes = 2; 
+            rangeLabel = '$150–$400';
+            minFee = 150;
+            maxFee = 400;
+        } else {
+            return { min: 0, max: 0, estimate: 0, label: '$0' };
+        }
+
+        // Calculation: (Estimated Boxes * $150) * 1.20, rounded to nearest $50
+        const rawEstimate = (numBoxes * BOX_COST_AVG) * TRANSPORT_MULTIPLIER;
+        const roundedEstimate = Math.round(rawEstimate / 50) * 50;
+
+        return { min: minFee, max: maxFee, estimate: roundedEstimate, label: rangeLabel };
     };
 
     // State
     let currentTrack = 'track1';
-    let currentScope = 'small'; // Default scope for Tracks I/II
+    let currentScope = 'small';
     let isEcoRecycling = false;
     let currentComplexity = 3;
+    let isBreakdownVisible = false;
 
     // Get the currently selected scope hours (or custom hours for track 3)
     const getProjectHours = () => {
       if (currentTrack === 'track3') {
-        // Track III uses custom hours, minimum 2
+        // Point 6: Enforcement
         let hours = parseInt(customHoursInput.value, 10) || serviceTracks.track3.minHours;
-        return Math.max(hours, serviceTracks.track3.minHours);
+        const enforcedHours = Math.max(hours, serviceTracks.track3.minHours);
+        
+        // Show/hide error message
+        if (hours < serviceTracks.track3.minHours) {
+            track3Error.classList.remove('hidden');
+        } else {
+            track3Error.classList.add('hidden');
+        }
+        return enforcedHours;
       } else {
-        // Tracks I & II use tiers
-        // Using scopeTiersData here
         return scopeTiersData[currentScope]?.hours || serviceTracks[currentTrack].minHours; 
       }
     };
 
-    // Core Calculation Logic
+    // Core Calculation Logic (Refactored for Breakdown - Point 3)
     const calculateCost = () => {
-      const track = serviceTracks[currentTrack];
       const hours = getProjectHours();
-      const modifier = complexityModifier[currentComplexity];
+      const track = serviceTracks[currentTrack];
+      const modifierData = complexityModifier[currentComplexity];
+      const ecoFeeData = getEcoRecyclingFee(hours);
+
+      // --- 1. Base Cost ---
+      const baseRate = track.rate;
+      const baseCost = hours * baseRate;
+
+      // --- 2. Complexity Adjustment ---
+      const adjustment = Math.round(baseCost * modifierData.percent);
+      const adjustedCost = baseCost + adjustment;
+
+      // --- 3. Eco Recycling Fee (Only if toggle is checked) ---
+      const ecoFee = isEcoRecycling ? ecoFeeData.estimate : 0;
+      const ecoFeeLabel = isEcoRecycling ? ecoFeeData.label : ecoFeeData.label; // Show range even if unchecked
       
-      let baseCost = hours * track.rate;
-      let breakdownText = '';
-
-      // Set base breakdown text
-      if (currentTrack === 'track3') {
-        breakdownText = `(Hourly Rate: $${track.rate}/hr x ${hours} hrs | Min 2 hrs)`;
-      } else {
-        // Tracks I & II
-        // Using scopeTiersData here
-        const tier = scopeTiersData[currentScope]?.label || 'Tier 1';
-        breakdownText = `(${tier} | $${track.rate}/hr x ${hours} hrs)`;
+      // --- 4. Total Cost ---
+      const totalCost = adjustedCost + ecoFee;
+      
+      // Stop calculation if hours are invalid (though UI enforces min 2)
+      if (hours < track.minHours && currentTrack === 'track3') {
+          estimatedCostDisplay.textContent = `$${(track.minHours * baseRate).toLocaleString()}`;
+          detailedBreakdown.innerHTML = `<p class="text-sm text-action-primary font-bold">Please enter a minimum of 2 hours for Track III.</p>`;
+          return;
       }
 
-      let totalCost = baseCost;
-
-      // Apply complexity modifier
-      if (modifier !== 1.0) {
-        const modifierAmount = totalCost * (modifier - 1);
-        totalCost += modifierAmount;
-        breakdownText += ` | Modifier: ${Math.round(modifier * 100)}%`;
-      }
-
-      // Add eco-recycling fee if checked
-      if (isEcoRecycling) {
-        totalCost += ecoRecyclingFee;
-        breakdownText += ` | Eco Fee: $${ecoRecyclingFee}`;
-      }
-
-      // Update UI
+      // --- 5. Update UI ---
       estimatedCostDisplay.textContent = `$${Math.round(totalCost).toLocaleString()}`;
-      costBreakdownDisplay.textContent = breakdownText;
+      
+      // Update TerraCycle Estimate range
+      ecoSurchargeEstimate.textContent = `Estimated surcharge for your project: ${ecoFeeData.label}`;
+
+      // Point 4: Update Complexity Status
+      complexityLevelText.textContent = modifierData.text;
+      complexityImpact.innerHTML = `Impact: ${modifierData.percent > 0 ? '+' : ''}${Math.round(modifierData.percent * 100)}% complexity adjustment (${modifierData.description})`;
+
+      // Point 7: Generate Detailed Breakdown
+      let breakdownHTML = `
+        <div class="text-sm">
+            <div class="flex justify-between font-bold text-primary-dark">
+                <span>Base Labor (${hours} hours &times; $${baseRate}/hr):</span>
+                <span>$${baseCost.toLocaleString()}</span>
+            </div>
+            <div class="flex justify-between ${adjustment >= 0 ? 'text-action-primary' : 'text-green-600'}">
+                <span>Complexity Adjustment (${modifierData.text}):</span>
+                <span>${adjustment >= 0 ? '+' : '-'}$${Math.abs(adjustment).toLocaleString()} (${modifierData.percent > 0 ? '+' : ''}${Math.round(modifierData.percent * 100)}%)</span>
+            </div>
+            <div class="flex justify-between ${isEcoRecycling ? 'text-action-primary' : 'text-gray-500'}">
+                <span>TerraCycle Surcharge (Estimate: ${isEcoRecycling ? ecoFeeData.label : ecoFeeData.label}):</span>
+                <span>${isEcoRecycling ? '+' : ''}$${ecoFee.toLocaleString()}</span>
+            </div>
+            <div class="border-t border-gray-400 mt-2 pt-2 flex justify-between font-impact text-lg text-primary-dark">
+                <span>TOTAL ESTIMATE:</span>
+                <span>$${Math.round(totalCost).toLocaleString()}</span>
+            </div>
+        </div>
+      `;
+      detailedBreakdown.innerHTML = breakdownHTML;
+      
+      // Toggle visibility based on state
+      if (isBreakdownVisible) {
+          detailedBreakdown.classList.remove('hidden');
+          breakdownToggle.textContent = 'Hide Detailed Breakdown ▲';
+      } else {
+          detailedBreakdown.classList.add('hidden');
+          breakdownToggle.textContent = 'Show Detailed Breakdown ▼';
+      }
     };
 
     // Update Service Description and manage visibility of scope selection
@@ -386,18 +509,17 @@
       trackTitle.textContent = track.title;
       trackDescription.textContent = track.description;
       
-      // Update bullets
       trackBullets.innerHTML = track.bullets.map(b => `<li>${b}</li>`).join('');
 
       // Manage visibility of Tiers vs. Custom Hours Input
       if (currentTrack === 'track3') {
         scopeTiers.classList.add('hidden');
         customHoursInputDiv.classList.remove('hidden');
-        // Ensure custom hours starts at minimum 2 when switching to Track III
-        customHoursInput.value = serviceTracks.track3.minHours;
+        customHoursInput.value = getProjectHours(); // Enforce visual min of 2
       } else {
         customHoursInputDiv.classList.add('hidden');
         scopeTiers.classList.remove('hidden');
+        track3Error.classList.add('hidden'); // Hide error on track change
       }
 
       calculateCost();
@@ -409,9 +531,7 @@
       updateDescription();
     });
 
-    // Tier selection is only relevant for Tracks I/II
     scopeTiers.addEventListener('change', (e) => {
-      // Added check to ensure it's a radio button change within the tiers container
       if (e.target.name === 'scope') {
         currentScope = e.target.value.toLowerCase();
         calculateCost();
@@ -425,6 +545,12 @@
       isEcoRecycling = e.target.checked;
       calculateCost();
     });
+    
+    // Breakdown Toggle (Point 7)
+    breakdownToggle.addEventListener('click', () => {
+        isBreakdownVisible = !isBreakdownVisible;
+        calculateCost(); // Re-run to update visibility/text
+    });
 
     complexitySlider.addEventListener('input', (e) => {
       currentComplexity = parseInt(e.target.value, 10);
@@ -432,13 +558,12 @@
     });
 
     // Initial setup
-    // Find the initially checked radio button to set initial state
     const initialTrackEl = document.querySelector('input[name="service"]:checked');
     if (initialTrackEl) {
       currentTrack = initialTrackEl.value;
     }
     
-    updateDescription(); // Set initial Track I description and logic visibility
-    calculateCost(); // Calculate initial cost
+    updateDescription();
+    calculateCost(); 
   });
 </script>
