@@ -82,11 +82,8 @@
     <h1 class="text-3xl font-impact tracking-widest font-normal text-primary-dark uppercase">Determine Your Project Investment</h1>
     <p class="mt-2 text-gray-700">Select the service track that matches your goal and estimate your scope.</p>
     
-    <!-- Example Scenarios Link (Point 10) -->
-    <p class="mt-4 text-sm text-action-secondary font-medium">
-      Not sure which track or tier fits your needs? 
-      <a href="#examples" class="underline hover:text-highlight transition">View Example Project Scenarios →</a>
-    </p>
+    <!-- REMOVED: Example Scenarios Link -->
+    
   </header>
 
   <!-- Service Selection -->
@@ -240,7 +237,7 @@
 
     <div class="flex justify-between text-xs mt-2 text-gray-600">
       <span>Straightforward (1)</span>
-      <span class="font-semibold text-primary-dark">Average Challenge (3)</span>
+      <span class="font-semibold text-primary-dark">Average (3)</span>
       <span>Highly Complex (5)</span>
     </div>
     
@@ -250,7 +247,7 @@
         Currently selected: <span id="complexity-level-text" class="font-bold text-highlight">Average Challenge (3)</span>
       </p>
       <p id="complexity-impact" class="text-xs text-gray-600 mt-1">
-        Impact: +10% complexity adjustment (Typical clutter, some challenges)
+        Impact: +10% complexity adjustment (Typical estate or downsizing, moderate emotional complexity, standard coordination)
       </p>
     </div>
   </section>
@@ -340,7 +337,7 @@
 
     // Configuration Data
     const HOURLY_RATE = 200;
-    const serviceTracks = { /* ... (Definitions remain the same) ... */
+    const serviceTracks = { 
       track1: { rate: HOURLY_RATE, minHours: 15, title: 'Track I Details: Estate & Physical Transitions', description: "The $200/hr rate covers all on-site work, travel, vendor coordination, donation drop-offs, and administrative time. I'm committed to finding true second lives for items and minimizing environmental impact.", bullets: ['Full-service estate management', 'Downsizing and decluttering support', 'Donation coordination and strategic placement'] },
       track2: { rate: HOURLY_RATE, minHours: 15, title: 'Track II Details: Business & Organizational Systems', description: "The $200/hr rate covers systems assessment, implementation, vendor coordination, staff training, and administrative setup.", bullets: ['Database migration and consolidation', 'Project management system deployment', 'Administrative efficiency and workflow documentation'] },
       track3: { rate: HOURLY_RATE, minHours: 2, title: 'Track III Details: Focused Sessions & De-influencing', description: "The $200/hr rate covers on-site work, assessment, coordination, travel, and follow-up. Perfect for focused support without a full project commitment.", bullets: ['Single-room or focused area organizing', 'Holiday decluttering (e.g., "Santa Needs Space")', 'Side-by-side decluttering sessions', 'Donation coordination'] }
@@ -351,16 +348,21 @@
       large: { hours: 55, label: 'TIER 3 (COMPREHENSIVE)' }
     };
 
-    // Point 3 & 4: Complexity Modifier Logic
+    // NEW Complexity Modifier Logic (Fixed Multipliers)
     const complexityModifier = {
-      1: { text: 'Straightforward (1)', percent: -0.05, description: 'Simple, organized space' }, // -5%
-      2: { text: 'Low Challenge (2)', percent: -0.05, description: 'Slightly cluttered, minimal conflict' }, // -5%
-      3: { text: 'Average Challenge (3)', percent: 0.10, description: 'Typical clutter, some challenges' }, // +10%
-      4: { text: 'High Challenge (4)', percent: 0.20, description: 'High clutter, moderate conflict/hazards' }, // +20%
-      5: { text: 'Highly Complex (5)', percent: 0.30, description: 'Hoarding, biohazards, high conflict, tight deadline' } // +30%
+      1: { multiplier: 1.00, text: 'Straightforward (1)', percent: 0.00, 
+           description: 'Organized space, cooperative client, no hazards, flexible timeline (Base Rate)' },
+      2: { multiplier: 1.05, text: 'Mostly Straightforward (2)', percent: 0.05, 
+           description: 'Minimal clutter, some time sensitivity, one minor complicating factor (+5%)' },
+      3: { multiplier: 1.10, text: 'Average Challenge (3)', percent: 0.10, 
+           description: 'Typical estate or downsizing, moderate emotional complexity, standard coordination (+10%)' },
+      4: { multiplier: 1.20, text: 'Challenging (4)', percent: 0.20, 
+           description: 'Significant clutter, family conflict, tight timeline, or minor hazards (+20%)' },
+      5: { multiplier: 1.30, text: 'Highly Complex (5)', percent: 0.30, 
+           description: 'Severe hoarding, high conflict, emergency timeline, or serious hazards (+30%)' }
     };
 
-    // New TerraCycle Surcharge Logic
+    // TerraCycle Surcharge Logic (No Change)
     const getEcoRecyclingFee = (hours) => {
         const BOX_COST_AVG = 150;
         const TRANSPORT_MULTIPLIER = 1.20;
@@ -414,7 +416,6 @@
     // Get the currently selected scope hours (or custom hours for track 3)
     const getProjectHours = () => {
       if (currentTrack === 'track3') {
-        // Point 6: Enforcement
         let hours = parseInt(customHoursInput.value, 10) || serviceTracks.track3.minHours;
         const enforcedHours = Math.max(hours, serviceTracks.track3.minHours);
         
@@ -430,7 +431,7 @@
       }
     };
 
-    // Core Calculation Logic (Refactored for Breakdown - Point 3)
+    // Core Calculation Logic (Updated for new complexity multiplier)
     const calculateCost = () => {
       const hours = getProjectHours();
       const track = serviceTracks[currentTrack];
@@ -441,16 +442,15 @@
       const baseRate = track.rate;
       const baseCost = hours * baseRate;
 
-      // --- 2. Complexity Adjustment ---
-      const adjustment = Math.round(baseCost * modifierData.percent);
-      const adjustedCost = baseCost + adjustment;
-
+      // --- 2. Complexity Adjustment (Base Cost * Multiplier) ---
+      const adjustedBaseCost = baseCost * modifierData.multiplier;
+      const adjustment = adjustedBaseCost - baseCost; // Calculate the premium/discount
+      
       // --- 3. Eco Recycling Fee (Only if toggle is checked) ---
       const ecoFee = isEcoRecycling ? ecoFeeData.estimate : 0;
-      const ecoFeeLabel = isEcoRecycling ? ecoFeeData.label : ecoFeeData.label; // Show range even if unchecked
       
       // --- 4. Total Cost ---
-      const totalCost = adjustedCost + ecoFee;
+      const totalCost = adjustedBaseCost + ecoFee;
       
       // Stop calculation if hours are invalid (though UI enforces min 2)
       if (hours < track.minHours && currentTrack === 'track3') {
@@ -465,11 +465,18 @@
       // Update TerraCycle Estimate range
       ecoSurchargeEstimate.textContent = `Estimated surcharge for your project: ${ecoFeeData.label}`;
 
-      // Point 4: Update Complexity Status
+      // Update Complexity Status
       complexityLevelText.textContent = modifierData.text;
-      complexityImpact.innerHTML = `Impact: ${modifierData.percent > 0 ? '+' : ''}${Math.round(modifierData.percent * 100)}% complexity adjustment (${modifierData.description})`;
+      
+      let impactText = `Adjustment: ${modifierData.percent > 0 ? '+' : ''}$${Math.round(adjustment).toLocaleString()} (${Math.round(modifierData.percent * 100)}%)`;
+      if (modifierData.percent === 0) {
+        impactText = 'Adjustment: No Change (Base Rate)';
+      }
 
-      // Point 7: Generate Detailed Breakdown
+      complexityImpact.innerHTML = `<span class="font-semibold text-primary-dark">${impactText}</span>. This level accounts for: ${modifierData.description}`;
+
+
+      // Generate Detailed Breakdown (Point 7)
       let breakdownHTML = `
         <div class="text-sm">
             <div class="flex justify-between font-bold text-primary-dark">
@@ -478,7 +485,7 @@
             </div>
             <div class="flex justify-between ${adjustment >= 0 ? 'text-action-primary' : 'text-green-600'}">
                 <span>Complexity Adjustment (${modifierData.text}):</span>
-                <span>${adjustment >= 0 ? '+' : '-'}$${Math.abs(adjustment).toLocaleString()} (${modifierData.percent > 0 ? '+' : ''}${Math.round(modifierData.percent * 100)}%)</span>
+                <span>${adjustment >= 0 ? '+' : ''}$${Math.abs(Math.round(adjustment)).toLocaleString()} (${Math.round(modifierData.percent * 100)}%)</span>
             </div>
             <div class="flex justify-between ${isEcoRecycling ? 'text-action-primary' : 'text-gray-500'}">
                 <span>TerraCycle Surcharge (Estimate: ${isEcoRecycling ? ecoFeeData.label : ecoFeeData.label}):</span>
